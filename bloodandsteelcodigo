@@ -1,0 +1,234 @@
+package bloodandsteel;
+
+/**
+ * Clase principal del juego Blood and Steel.
+ * Controla el inicio, pausa y salida del juego.
+ * 
+ * @author Pepe
+ * @version 1.0
+ */
+public class BloodAndSteel {
+
+    /**
+     * Inicia el juego.
+     * 
+     * @param modoJuego El modo de juego (campaña, libre, supervivencia).
+     * @throws GameException Si ocurre un error al cargar los recursos.
+     */
+    public void iniciar(String modoJuego) throws GameException {
+        // Lógica de inicialización (simulada)
+        if (modoJuego == null || modoJuego.isEmpty()) {
+            throw new GameException("Modo de juego no válido");
+        }
+        System.out.println("Iniciando el juego en modo: " + modoJuego);
+    }
+
+    /**
+     * Pausa el juego en curso.
+     */
+    public void pausar() {
+        System.out.println("Juego pausado.");
+    }
+
+    /**
+     * Cierra el juego y guarda el progreso.
+     * 
+     * @return true si se ha cerrado correctamente.
+     */
+    public boolean cerrarJuego() {
+        System.out.println("Juego cerrado correctamente.");
+        return true;
+    }
+}
+
+
+package bloodandsteel;
+
+/**
+ * Sistema de combate del juego Blood and Steel.
+ * Controla los enfrentamientos entre personajes y enemigos.
+ * 
+ * @author Pepe
+ * @version 1.0
+ */
+public class Combate {
+
+    /**
+     * Ejecuta un turno de combate entre personaje y enemigo.
+     * 
+     * @param p Personaje jugador.
+     * @param e Enemigo rival.
+     * @return Resultado del turno ("Victoria", "Derrota", "En curso").
+     */
+    public String ejecutarTurno(Personaje p, Enemigo e) {
+        p.atacar(e);
+        if (e.estaMuerto()) return "Victoria";
+
+        e.recibirDanio(5); // simulación básica
+        return p.recuperarEnergia() < 0 ? "Derrota" : "En curso";
+    }
+}
+
+
+package bloodandsteel;
+
+/**
+ * Clase que representa a un enemigo del juego.
+ * Puede recibir daño y atacar al jugador.
+ * 
+ * @author Antonio
+ * @version 1.0
+ */
+public class Enemigo {
+
+    private String tipo;
+    private int salud;
+
+    /**
+     * Crea un enemigo con un tipo y salud.
+     * 
+     * @param tipo Tipo de enemigo (orco, mago, etc.).
+     * @param salud Salud inicial.
+     */
+    public Enemigo(String tipo, int salud) {
+        this.tipo = tipo;
+        this.salud = salud;
+    }
+
+    /**
+     * El enemigo recibe daño.
+     * 
+     * @param puntos Cantidad de daño recibido.
+     */
+    public void recibirDanio(int puntos) {
+        salud -= puntos;
+        System.out.println(tipo + " ha recibido " + puntos + " de daño.");
+    }
+
+    /**
+     * Comprueba si el enemigo ha muerto.
+     * 
+     * @return true si la salud es menor o igual a cero.
+     */
+    public boolean estaMuerto() {
+        return salud <= 0;
+    }
+
+    /**
+     * Devuelve el tipo de enemigo.
+     * 
+     * @return El tipo de enemigo.
+     */
+    public String getTipo() {
+        return tipo;
+    }
+}
+
+
+package bloodandsteel;
+
+/**
+ * Excepción personalizada para errores del juego Blood and Steel.
+ * Se lanza cuando ocurre un problema al iniciar el juego.
+ * 
+ * @author Pepe
+ * @version 1.0
+ */
+public class GameException extends Exception {
+
+    /**
+     * Constructor de la excepción.
+     * 
+     * @param mensaje Mensaje de error.
+     */
+    public GameException(String mensaje) {
+        super(mensaje);
+    }
+}
+
+
+package bloodandsteel;
+
+/**
+ * Representa a un personaje controlado por el jugador.
+ * Contiene estadísticas básicas y métodos de acción.
+ * Incluye ataque a enemigos y recuperación de energía.
+ * 
+ * @author Yu
+ * @version 1.0
+ */
+public class Personaje {
+
+    private String nombre;
+    private int salud;
+    private int energia;
+
+    /**
+     * Constructor del personaje.
+     * 
+     * @param nombre Nombre del personaje.
+     * @param salud Cantidad inicial de salud.
+     * @param energia Nivel inicial de energía.
+     */
+    public Personaje(String nombre, int salud, int energia) {
+        this.nombre = nombre;
+        this.salud = salud;
+        this.energia = energia;
+    }
+
+    /**
+     * Ataca a un enemigo.
+     * 
+     * @param enemigo El enemigo que recibe el ataque.
+     */
+    public void atacar(Enemigo enemigo) {
+        System.out.println(nombre + " ataca a " + enemigo.getTipo() + " con su espada.");
+        enemigo.recibirDanio(10);
+    }
+
+    /**
+     * Recupera energía.
+     * 
+     * @return Nueva cantidad de energía.
+     */
+    public int recuperarEnergia() {
+        this.energia += 5;
+        System.out.println(nombre + " recupera energía. Energía actual: " + energia);
+        return energia;
+    }
+}
+
+
+package bloodandsteel;
+
+/**
+ * @author Pepe
+ * @version 1.0
+ */
+public class Main {
+
+    public static void main(String[] args) {
+        try {
+            // Inicia el juego
+            BloodAndSteel juego = new BloodAndSteel();
+            juego.iniciar("campaña");
+
+            // Crea un personaje y un enemigo
+            Personaje jugador = new Personaje("Arthan", 100, 50);
+            Enemigo enemigo = new Enemigo("Orco Guerrero", 30);
+
+            // Ejecuta un turno de combate
+            Combate combate = new Combate();
+            String resultado = combate.ejecutarTurno(jugador, enemigo);
+
+            System.out.println("Resultado del turno: " + resultado);
+
+            // Pausa y cierra el juego
+            juego.pausar();
+            juego.cerrarJuego();
+
+        } catch (GameException ex) {
+            System.err.println("Error al iniciar el juego: " + ex.getMessage());
+        }
+    }
+}
