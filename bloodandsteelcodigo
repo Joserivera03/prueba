@@ -76,7 +76,7 @@ package bloodandsteel;
  * Clase que representa a un enemigo del juego.
  * Puede recibir daño y atacar al jugador.
  * 
- * @author Antonio
+ * @author Carlos
  * @version 1.0
  */
 public class Enemigo {
@@ -154,7 +154,7 @@ package bloodandsteel;
  * Contiene estadísticas básicas y métodos de acción.
  * Incluye ataque a enemigos y recuperación de energía.
  * 
- * @author Yu
+ * @author Carlos
  * @version 1.0
  */
 public class Personaje {
